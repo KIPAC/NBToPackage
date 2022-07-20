@@ -19,8 +19,9 @@ def main():
     parser.add_argument('plots', metavar='NAMES', type=str, nargs='+', help='Names of plots to draw')
 
     args = parser.parse_args()
-    pc = PlotCollection(args.data_url, args.output)
+    pc = PlotCollection(args.data_url, args.output, args.config)
 
+    
     pc.make_plots(args.plots)
     if args.file_type is None:
         pc.show_figs(args.plots)

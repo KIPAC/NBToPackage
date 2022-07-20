@@ -52,7 +52,7 @@ class Plotter:
 
 @dataclass
 class PlotConfig:
-    """Simple class to carry around the configurate we use to make a plot"""
+    """Simple class to carry around the configuration we use to make a plot"""
 
     plotname: str
     classname: str
@@ -98,36 +98,32 @@ class PlotCollection:
         """Return the version of the code used to make the plot"""
         return "v1"
 
-    def __init__(self, data_url, output_dir):
+    def __init__(self, data_url, output_dir, config=None):
         self._data_url = data_url
         self._catalog = fitsio.FITS(self._data_url)
         self._output_dir = output_dir
         self._fig_dict = OrderedDict()
         self._plot_info_dict = OrderedDict()
         self._plotter_dict = OrderedDict()
+        self.read_config(config)
 
-    @staticmethod
-    def read_config(config_url, plot_names):
+    def read_config(self, config_url):
         """Get a list of PlotInfo objects from a yaml file"""
-        with open(config_url, 'rt', encoding='utf-8') as config_file:
-            #config_data = yaml.load(config_file)
-            config_data = {}
-        if not plot_names:
-            plot_names = config_data.keys()
-        return [config_data[plot_name] for plot_name in plot_names]
-
-    @classmethod
-    def default_config(cls, plot_names):
-        """Get one PlotInfo for each plotter we have defined"""
-        if not plot_names:
-            plot_names = Plotter.plotters.keys()
-        return [PlotConfig(key, key, Plotter.plotters[key].default_config) for key in plot_names]
-
-    def make_plots(self, plot_info_list):
-        """Make all the plots in the list"""
-        for plot_info in plot_info_list:
-            the_plotter = plot_info.build_plotter()
+        if config_url is None:
+            config_data = [dict(plotname=key, classname=key, plot_config={}) for key in Plotter.plotters.keys()]
+        else:
+            with open(config_url, 'rt', encoding='utf-8') as config_file:
+                #config_data = yaml.load(config_file)
+                config_data = []
+        for config in config_data:
+            plot_info = PlotConfig.from_dict(config)
             self._plot_info_dict[plot_info.plotname] = plot_info
+
+    def make_plots(self, plot_names):
+        """Make all the plots in the list"""
+        for plot_name in plot_names:
+            plot_info = self._plot_info_dict[plot_name]
+            the_plotter = plot_info.build_plotter()
             self._plotter_dict[plot_info.plotname] = the_plotter
             self._fig_dict[plot_info.plotname] = the_plotter(self._catalog)
 
@@ -137,8 +133,8 @@ class PlotCollection:
         metadata = dict(
             version=self.get_version(),
             data_url=self._data_url,
-            plot_function=plot_info.funcname,
-            plot_config=plot_info.plot_config,
+            plot_function=plot_info.classname,
+            plot_config=str(plot_info.plot_config),
         )
         with PdfPages(save_name) as pdf:
             pdf.savefig(fig)
