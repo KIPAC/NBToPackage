@@ -61,7 +61,7 @@ class PlotFluxByBand(Plotter):
     default_config = dict(
         zeropt=30.0,
         figsize=(16, 22),
-        bands="grizY",
+        bands="griz",
         nbins=50,
         xmin=14,
         xmax=24,
@@ -70,7 +70,7 @@ class PlotFluxByBand(Plotter):
     def _make_plot(self, cat):
         fig, ax = plt.subplots(1, 1, figsize=self.config["figsize"])
         bins = np.linspace(
-            self.config["nbins"], self.config["xmin"], self.config["xmax"]
+            self.config["xmin"], self.config["xmax"], self.config["nbins"] + 1
         )
         for band in self.config["bands"]:
             flux = cat["FLUX"][cat["BAND"] == band]
@@ -88,7 +88,7 @@ class PlotColorsByBandMulti(Plotter):
 
     default_config = dict(
         figsize=(16, 22),
-        bands="grizY",
+        bands="grizy",
     )
 
     def _make_plot(self, cat):
@@ -112,7 +112,7 @@ class PlotColorsByBandSingle(Plotter):
 
     default_config = dict(
         figsize=(12, 8),
-        bands="grizY",
+        bands="grizy",
     )
 
     def _make_plot(self, cat):
@@ -139,7 +139,7 @@ class PlotColorVMagByBand(Plotter):
 
     default_config = dict(
         figsize=(16, 24),
-        bands="grizY",
+        bands="griz",
     )
 
     def _make_plot(self, cat):
@@ -197,7 +197,7 @@ class PlotSizeAndEllipticityByBand(Plotter):
 
     default_config = dict(
         figsize=(16, 24),
-        bands="grizY",
+        bands="grizy",
     )
 
     def _make_plot(self, cat):
@@ -234,7 +234,7 @@ class PlotSizeByBand(Plotter):
 
     default_config = dict(
         figsize=(16, 24),
-        bands="grizY",
+        bands="grizy",
         logscale=False,
     )
 
@@ -263,7 +263,7 @@ class PlotSeeingByBand(Plotter):
 
     default_config = dict(
         figsize=(16, 24),
-        bands="grizY",
+        bands="grizy",
     )
 
     def _make_plot(self, cat):
@@ -497,6 +497,8 @@ class PlotResidualsByBand(Plotter):
         fig, axes = plt.subplots(
             3, 4, figsize=self.config["figsize"], sharey="row", sharex="col"
         )
+        if True:
+            return fig
         for band in bands:
             data = cat[cat["BAND"] == band]
             fracsizeres, sizeres, e1res, e2res = compute_res(data)

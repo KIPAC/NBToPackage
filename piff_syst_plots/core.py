@@ -119,8 +119,15 @@ class PlotCollection:
             plot_info = PlotConfig.from_dict(config)
             self._plot_info_dict[plot_info.plotname] = plot_info
 
+    def add_default_plotters(self):
+        """Add a bunch of plotters"""
+        for key in Plotter.plotters.keys():
+            self._plot_info_dict[key] = PlotConfig(key, key, {})
+            
     def make_plots(self, plot_names):
         """Make all the plots in the list"""
+        if not plot_names:
+            plot_names = self._plot_info_dict.keys()
         for plot_name in plot_names:
             plot_info = self._plot_info_dict[plot_name]
             the_plotter = plot_info.build_plotter()

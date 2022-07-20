@@ -2,7 +2,8 @@
 
 import argparse
 
-from piff_syst_plots.core import PlotCollection
+from piff_syst_plots.core import PlotCollection, Plotter
+from piff_syst_plots.plotters import *
 
 
 def main():
@@ -14,15 +15,23 @@ def main():
     parser.add_argument('-c', '--config', metavar='FILE', type=str, help='Yaml configuration file')
     parser.add_argument('-f', '--file_type', metavar='', type=str, help='Yaml configuration file',
                             choices=['pdf', 'png', 'eps', 'jpg'])
-    parser.add_argument('-a', '--annotate', type=bool, action='store_true',
-                            help='Store provenance metdata with pdf')
-    parser.add_argument('plots', metavar='NAMES', type=str, nargs='+', help='Names of plots to draw')
+    parser.add_argument('-a', '--annotate', action='store_true', help='Store provenance metdata with pdf')
+    parser.add_argument('-l', '--list_plotters', action='store_true', help='list plotters')
+    parser.add_argument('plots', metavar='NAMES', type=str, nargs='*', help='Names of plots to draw')
 
     args = parser.parse_args()
-    pc = PlotCollection(args.data_url, args.output, args.config)
 
-    
+    if args.list_plotters:
+        print(list(Plotter.plotters.keys()))
+        return
+
+    pc = PlotCollection(args.data, args.output, args.config)
+
+    if args.config is None:
+        pc.add_default_plotters()
+
     pc.make_plots(args.plots)
+
     if args.file_type is None:
         pc.show_figs(args.plots)
     else:
