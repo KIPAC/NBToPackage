@@ -23,22 +23,22 @@ To reach these objectives we are going to break this down as follows
 
 ## Pre-course materials
 
-Please have a look at the slides from Dark Energy School [session on design code libraries and abstract public interfaces (APIs)](https://lsstdesc.org/pages/DESchool.html#JarvisZuntz), (slides are here)[https://lsstdesc.org/assets/pdf/docs/ParisDESchoolAPIDesign.pdf]
+Please have a look at the slides from Dark Energy School [session on design code libraries and abstract public interfaces (APIs)](https://lsstdesc.org/pages/DESchool.html#JarvisZuntz), [slides are here](https://lsstdesc.org/assets/pdf/docs/ParisDESchoolAPIDesign.pdf)
 
 
 ## Course Contents
 
-Here is a hand link to a google doc template with the questions copied out, you can do "File -> make a copy" to make your own doc that you can use to work together to come up with answers to some of those questions:  (doc template)[https://docs.google.com/document/d/1mV_T4pvxMIC9lSOCJpREhpsWqbZGWYnC1OsEHrrL3hA/edit?usp=sharing] 
+Here is a hand link to a google doc template with the questions copied out, you can do "File -> make a copy" to make your own doc that you can use to work together to come up with answers to some of those questions:  [doc template](https://docs.google.com/document/d/1mV_T4pvxMIC9lSOCJpREhpsWqbZGWYnC1OsEHrrL3hA/edit?usp=sharing)
 
-[Original Notebook)[01_starting_with_the_original.md)
+[Original Notebook](01_starting_with_the_original.md)
 
-[Software Goals)[02_goals_for_our_software.md)
+[Software Goals)(02_goals_for_our_software.md)
 
-[Designing our Package)[03_designing_our_package.md]
+[Designing our Package](03_designing_our_package.md)
 
-[Implementation of our Package)[04_implementation_of_our_package.md]
+[Implementation of our Package](04_implementation_of_our_package.md)
 
-Extras[Python package tooling][extra_python_tooling.md]
+Extras[Python package tooling](extra_python_tooling.md)
 
 
 
