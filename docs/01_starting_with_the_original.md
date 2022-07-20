@@ -1,6 +1,6 @@
 # Starting with the original notebook
 
-Please have a look at the (original notebook)[../nb/orig_nb.ipynb]
+Please have a look at the [original notebook](../nb/orig_nb.ipynb)
 
 Some questions for discussion:
 

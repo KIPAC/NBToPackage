@@ -32,13 +32,13 @@ Here is a hand link to a google doc template with the questions copied out, you 
 
 [Original Notebook](01_starting_with_the_original.md)
 
-[Software Goals)(02_goals_for_our_software.md)
+[Software Goals](02_goals_for_our_software.md)
 
 [Designing our Package](03_designing_our_package.md)
 
 [Implementation of our Package](04_implementation_of_our_package.md)
 
-Extras[Python package tooling](extra_python_tooling.md)
+Extras: [Python package tooling](extra_python_tooling.md)
 
 
 
