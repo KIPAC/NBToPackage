@@ -22,6 +22,8 @@ class PlotStarsPerCCD(Plotter):
 
     def _make_plot(self, cat):
         fig = plt.figure(figsize=self.config["figsize"])
+        if cat is None:
+            cat = dict(EXPNUM=np.random.randint(10, size=10000), CCDNUM=np.random.randint(50, size=10000))
         _, nstars = np.unique(
             np.stack((cat["EXPNUM"], cat["CCDNUM"]), axis=1), axis=0, return_counts=True
         )

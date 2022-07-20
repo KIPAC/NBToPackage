@@ -9,7 +9,6 @@ from dataclasses import dataclass
 import fitsio
 
 from matplotlib.backends.backend_pdf import PdfPages
-from matplotlib import Figure
 
 
 class Plotter:
@@ -40,12 +39,12 @@ class Plotter:
         """Configuration used to make plots"""
         return self._config
 
-    def __call__(self, cat, **kwargs) -> Figure:
+    def __call__(self, cat, **kwargs):
         """Main function, makes figure"""
         self._config.update(**kwargs)
         self._make_plot(cat)
 
-    def _make_plot(self, cat) -> Figure:
+    def _make_plot(self, cat):
         """This function need to be implemented by the sub-class"""
         raise NotImplementedError()
 
@@ -80,7 +79,7 @@ class PlotConfig:
         plotter_class = Plotter.plotters.get(self.classname)
         if plotter_class is None:
             raise KeyError(f"Could not find a plotter class called {self.classname}")
-        return plotter_class(self.plotname, **self.plot_config)
+        return plotter_class(**self.plot_config)
 
 
 def add_pdf_metatada(pdffig, metadata):
@@ -100,7 +99,11 @@ class PlotCollection:
 
     def __init__(self, data_url, output_dir, config=None):
         self._data_url = data_url
-        self._catalog = fitsio.FITS(self._data_url)
+        try:
+            self._catalog = fitsio.FITS(self._data_url)
+        except OSError as msg:
+            self._catalog = None
+            print(msg)
         self._output_dir = output_dir
         self._fig_dict = OrderedDict()
         self._plot_info_dict = OrderedDict()
@@ -110,11 +113,10 @@ class PlotCollection:
     def read_config(self, config_url):
         """Get a list of PlotInfo objects from a yaml file"""
         if config_url is None:
-            config_data = [dict(plotname=key, classname=key, plot_config={}) for key in Plotter.plotters.keys()]
-        else:
-            with open(config_url, 'rt', encoding='utf-8') as config_file:
-                #config_data = yaml.load(config_file)
-                config_data = []
+            return
+        with open(config_url, 'rt', encoding='utf-8') as config_file:
+            #config_data = yaml.load(config_file)
+            config_data = []
         for config in config_data:
             plot_info = PlotConfig.from_dict(config)
             self._plot_info_dict[plot_info.plotname] = plot_info
@@ -164,3 +166,13 @@ class PlotCollection:
                 self._save_annotated(fig, fig_name, save_name)
             else:
                 fig.savefig(save_name)
+
+    def add_plot(self, plot_name, plotter_class, **kwargs):
+        """Add a plot to this collection"""
+        plot_info = PlotConfig(plot_name, plotter_class.__name__, kwargs)
+        the_plotter = plot_info.build_plotter()
+        self._plot_info_dict[plot_info.plotname] = plot_info
+        self._plotter_dict[plot_info.plotname] = the_plotter
+        the_fig = the_plotter(self._catalog)
+        self._fig_dict[plot_info.plotname] = the_fig
+        return the_fig
