@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+import argparse
+
+from piff_syst_plots.core import PlotCollection
+
+
+def main():
+    """Main function"""
+
+    parser = argparse.ArgumentParser(prog='piff_syst_plots')
+    parser.add_argument('-d', '--data', metavar='FILE', type=str, help='Path to data', required=True)
+    parser.add_argument('-o', '--output', metavar='DIR', type=str, help='Output directory', default='.')
+    parser.add_argument('-c', '--config', metavar='FILE', type=str, help='Yaml configuration file')
+    parser.add_argument('-f', '--file_type', metavar='', type=str, help='Yaml configuration file',
+                            choices=['pdf', 'png', 'eps', 'jpg'])
+    parser.add_argument('-a', '--annotate', type=bool, action='store_true',
+                            help='Store provenance metdata with pdf')
+    parser.add_argument('plots', metavar='NAMES', type=str, nargs='+', help='Names of plots to draw')
+
+    args = parser.parse_args()
+    pc = PlotCollection(args.data_url, args.output)
+
+    pc.make_plots(args.plots)
+    if args.file_type is None:
+        pc.show_figs(args.plots)
+    else:
+        pc.save_figs(args.plots, args.file_type, args.annotate)
+
+
+if __name__ == '__main__':
+    main()
