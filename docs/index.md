@@ -19,7 +19,7 @@ To reach these objectives we are going to break this down as follows
   1. start with a pretty typical notebook that makes a bunch of plots for a paper, and characterize what the notebook is doing,
   2. rethink what we want from the software, 
   3. come up with some design that gets us more of what we want,
-  4. look at an example implemenation of a python package that replaces the original notebook and see how it address what we came up with in 2,3,4 and 5.
+  4. look at an example implementation of a python package that replaces the original notebook and see how it address what we came up with in 2,3,4 and 5.
 
 ## Pre-course materials
 
@@ -27,6 +27,8 @@ Please have a look at the slides from Dark Energy School [session on design code
 
 
 ## Course Contents
+
+Here is a hand link to a google doc template with the questions copied out, you can do "File -> make a copy" to make your own doc that you can use to work together to come up with answers to some of those questions:  (doc template)[https://docs.google.com/document/d/1mV_T4pvxMIC9lSOCJpREhpsWqbZGWYnC1OsEHrrL3hA/edit?usp=sharing] 
 
 [Original Notebook)[01_starting_with_the_original.md)
 
@@ -39,3 +41,14 @@ Please have a look at the slides from Dark Energy School [session on design code
 Extras[Python package tooling][extra_python_tooling.md]
 
 
+
+<!--  LocalWords:  jupyter JarvisZuntz 02_goals_for_our_software.md
+ -->
+<!--  LocalWords:  01_starting_with_the_original.md
+ -->
+<!--  LocalWords:  03_designing_our_package.md
+ -->
+<!--  LocalWords:  04_implementation_of_our_package.md
+ -->
+<!--  LocalWords:  extra_python_tooling.md
+ -->

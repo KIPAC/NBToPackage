@@ -11,4 +11,3 @@ I'm going to give a brief tour of the implementation I came up with.  Here are s
 
 For what it's worth, here is [my take on those questions](04_answers.md)
 
-

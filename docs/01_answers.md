@@ -4,7 +4,7 @@
 
 It is making a bunch of plots for a paper.  One really useful thing to notice is that all the plots are being made from the same input catalog.
 
-## 2. Is there are lot of redundancy / code duplication in the notebook that could be reduced? 
+## 2. Is there a lot of redundancy / code duplication in the notebook that could be reduced? 
 
 There is a bit, but actually most of the plots are somewhat independent of each other.
 
