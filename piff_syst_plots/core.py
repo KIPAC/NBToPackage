@@ -42,7 +42,7 @@ class Plotter:
     def __call__(self, cat, **kwargs):
         """Main function, makes figure"""
         self._config.update(**kwargs)
-        self._make_plot(cat)
+        return self._make_plot(cat)
 
     def _make_plot(self, cat):
         """This function need to be implemented by the sub-class"""
@@ -99,11 +99,9 @@ class PlotCollection:
 
     def __init__(self, data_url, output_dir, config=None):
         self._data_url = data_url
-        try:
-            self._catalog = fitsio.FITS(self._data_url)
-        except OSError as msg:
-            self._catalog = None
-            print(msg)
+        self._catalog = fitsio.FITS(self._data_url)[1]
+        self._catalog.upper = True
+        self._catalog = self._catalog[:]
         self._output_dir = output_dir
         self._fig_dict = OrderedDict()
         self._plot_info_dict = OrderedDict()
@@ -138,8 +136,8 @@ class PlotCollection:
             plot_function=plot_info.classname,
             plot_config=str(plot_info.plot_config),
         )
+        fig.savefig(save_name)
         with PdfPages(save_name) as pdf:
-            pdf.savefig(fig)
             add_pdf_metatada(pdf, metadata)
 
     def show_fig(self, fig_name):
@@ -159,8 +157,14 @@ class PlotCollection:
         if not fig_name_list:
             fig_name_list = self._fig_dict.keys()
 
+        try:
+            os.makedirs(self._output_dir)
+        except OSError:
+            pass
         for fig_name in fig_name_list:
             fig = self._fig_dict[fig_name]
+            if fig is None:
+                return
             save_name = os.path.join(self._output_dir, f"{fig_name}.{file_type}")
             if file_type == "pdf" and annotated:
                 self._save_annotated(fig, fig_name, save_name)

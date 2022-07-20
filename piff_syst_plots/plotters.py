@@ -22,8 +22,6 @@ class PlotStarsPerCCD(Plotter):
 
     def _make_plot(self, cat):
         fig = plt.figure(figsize=self.config["figsize"])
-        if cat is None:
-            cat = dict(EXPNUM=np.random.randint(10, size=10000), CCDNUM=np.random.randint(50, size=10000))
         _, nstars = np.unique(
             np.stack((cat["EXPNUM"], cat["CCDNUM"]), axis=1), axis=0, return_counts=True
         )
@@ -117,7 +115,7 @@ class PlotColorsByBandSingle(Plotter):
         bands="grizY",
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
 
         bands = self.config["bands"]
         fig, ax = plt.subplots(1, 1, figsize=self.config["figsize"])
@@ -144,7 +142,7 @@ class PlotColorVMagByBand(Plotter):
         bands="grizY",
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
 
         bands = self.config["bands"]
         fig, axs = plt.subplots(len(bands), 2, figsize=self.config["figsize"])
@@ -202,7 +200,7 @@ class PlotSizeAndEllipticityByBand(Plotter):
         bands="grizY",
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
         bands = self.config["bands"]
         fig, axs = plt.subplots(len(bands), 2, figsize=self.config["figsize"])
         for i, band in enumerate(bands):
@@ -240,7 +238,7 @@ class PlotSizeByBand(Plotter):
         logscale=False,
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
         bands = self.config["bands"]
         fig, axs = plt.subplots(1, 1, figsize=self.config["figsize"])
         for band in bands:
@@ -268,7 +266,7 @@ class PlotSeeingByBand(Plotter):
         bands="grizY",
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
 
         bands = self.config["bands"]
         fig, axs = plt.subplots(1, 1, figsize=self.config["figsize"])
@@ -372,7 +370,7 @@ class PlotSizeVColorByBands(Plotter):
         bands="griz",
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
         bands = self.config["bands"]
         fig, axs = plt.subplots(4, 2, figsize=self.config["figsize"])
         for i, band in enumerate(bands):
@@ -494,7 +492,7 @@ class PlotResidualsByBand(Plotter):
         bands="griz",
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
         bands = self.config["bands"]
         fig, axes = plt.subplots(
             3, 4, figsize=self.config["figsize"], sharey="row", sharex="col"
@@ -709,7 +707,7 @@ class PlotPsfByBand(Plotter):
         bands="griz",
     )
 
-    def _make_plots(self, cat):
+    def _make_plot(self, cat):
         bands = self.config["bands"]
         fig, axes = plt.subplots(
             3, 4, figsize=self.config["figsize"], sharey="row", sharex="col"
