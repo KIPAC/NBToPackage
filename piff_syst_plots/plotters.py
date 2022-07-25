@@ -8,7 +8,7 @@ from piff_syst_plots.core import Plotter
 
 
 class PlotStarsPerCCD(Plotter):
-    """Rough histogram of nstars/CCD
+    """Plot rough histogram of nstars/CCD
 
     The 'factor' parameter accounts the fact that we are making this plot with
     the reserve stars, which are typically 20% of the total,  Thuse the default value of 5.
@@ -56,7 +56,7 @@ class PlotFootprint(Plotter):
 
 
 class PlotFluxByBand(Plotter):
-    """Makes a single plot with all the fluxes"""
+    """Plot histograms of magnitudes in each band on a single plot"""
 
     default_config = dict(
         zeropt=30.0,
@@ -84,7 +84,7 @@ class PlotFluxByBand(Plotter):
 
 
 class PlotColorsByBandMulti(Plotter):
-    """plot color distribution per band on multiple plots"""
+    """Plot the color distribution per band on multiple plots"""
 
     default_config = dict(
         figsize=(16, 22),
@@ -108,7 +108,7 @@ class PlotColorsByBandMulti(Plotter):
 
 
 class PlotColorsByBandSingle(Plotter):
-    """plot color distribution per band on single plot"""
+    """Plot the color distribution per band on a single plot"""
 
     default_config = dict(
         figsize=(12, 8),
@@ -134,8 +134,11 @@ class PlotColorsByBandSingle(Plotter):
 
 
 class PlotColorVMagByBand(Plotter):
-    """plot color v mag distribution per band on a grid
-    of 2 X nband plots"""
+    """
+    Make a figure of 2 x nband plots. In first column, plot a hexbin 2D histogram in 
+    color-magnitude space per band, in log scale. In second column, plot the color 
+    distribution in slices of magnitude.
+    """
 
     default_config = dict(
         figsize=(16, 24),
@@ -192,8 +195,10 @@ class PlotColorVMagByBand(Plotter):
 
 
 class PlotSizeAndEllipticityByBand(Plotter):
-    """Plot the size and the ellipiticy on
-    a 2 X nband grid of plots"""
+    """
+    Plot histograms of the size (T) and ellipticity components (e1, e2) per band
+    on a 2 X nband grid of plots
+    """
 
     default_config = dict(
         figsize=(16, 24),
@@ -229,8 +234,7 @@ class PlotSizeAndEllipticityByBand(Plotter):
 
 
 class PlotSizeByBand(Plotter):
-    """Plot the distributions of sizes for each band
-    on single plot"""
+    """Plot the distributions of size for each band on a single plot"""
 
     default_config = dict(
         figsize=(16, 24),
@@ -258,8 +262,7 @@ class PlotSizeByBand(Plotter):
 
 
 class PlotSeeingByBand(Plotter):
-    """Plot the distributions of seeing for each band
-    on single plot"""
+    """Plot the distributions of seeing for each band on a single plot"""
 
     default_config = dict(
         figsize=(16, 24),
@@ -282,7 +285,8 @@ class PlotSeeingByBand(Plotter):
 
 
 class PlotTversusFWHMByBand(Plotter):
-    """Plot T v. FWHM by band on a single plot"""
+    """Plot hexbin 2D histogram in size-FWHM space, log scaled. Plot in a grid
+       with one plot per band"""
 
     default_config = dict(
         figsize=(20, 18),
@@ -293,14 +297,7 @@ class PlotTversusFWHMByBand(Plotter):
         bands = self.config["bands"]
         fig, axs = plt.subplots(2, 2, figsize=self.config["figsize"])
         for i, band in enumerate(bands):
-            # <T> vs (color, mag)
             ax = axs[int(i / 2)][i % 2]
-            # if band == 'z':
-            #     color = 'IZ_COLOR'
-            #     cmax = 0.7
-            # else:
-            #     color = 'GI_COLOR'
-            #     cmax = 3.5
             data = cat[cat["BAND"] == band]
             tsize = data["T_DATA"]
             fwhm = data["PSF_FWHM"]
@@ -317,7 +314,6 @@ class PlotTversusFWHMByBand(Plotter):
                 vmax=1e6,
             )
             ax.plot(np.linspace(0, 3.5, 2), np.linspace(0.5, 3.0, 2), c="k", alpha=0.3)
-        # ax.set_aspect('equal')
         ax.set_xlim(0, 3.5)
         ax.set_ylim(0.5, 3.0)
         ax.set_xlabel(r"$T [arcsec^2]$")
@@ -328,9 +324,9 @@ class PlotTversusFWHMByBand(Plotter):
 
 
 def add_profile_by_color_to_ax(
-    m, dT, ax, color, cmin=0.0, cmax=3.5, tmin=0.0, tmax=1.0  # min_mused=None
+    m, dT, ax, color, cmin=0.0, cmax=3.5, tmin=0.0, tmax=1.0
 ):
-    """Add a profile plot to an axis"""
+    """Compute a profile binned by color and add a plot of the profile to an axis"""
     mag_bins = np.linspace(cmin, cmax, 30)
     print("col_bins = ", mag_bins)
 
@@ -350,20 +346,18 @@ def add_profile_by_color_to_ax(
             bin_dT_err[i - 1] = 0.0
 
     ax.set_ylim(tmin, tmax)
-    # ax.plot([cmin,cmax], [0,0], color='black')
-    # ax.plot([min_mused,min_mused],[-1,1], color='Grey')
-    # ax.fill( [min_mag,min_mag,min_mused,min_mused], [-1,1,1,-1], fill=True, color='Grey',alpha=0.3)
     _ = ax.errorbar(mag_bins[:-1], bin_dT, yerr=bin_dT_err, color="b", fmt="o")
-    # ax.axhline(y=0.003, linewidth=4, color='grey')
-    # ax.legend([t_line], [r'$\delta T$'])
     ax.set_ylabel(r"$\left<T_{data}\right> \quad({\rm arcsec}^2)$")
     ax.set_xlabel(color)
     plt.tight_layout()
 
 
 class PlotSizeVColorByBands(Plotter):
-    """Plot the size v. color in a
-    2 X nband grid of plots"""
+    """
+    Make a figure of 2 x nband plots. In first column, plot a hexbin 2D histogram in 
+    color-magnitude space per band, in log scale. In second column, plot the size
+    profile binned by color.
+    """
 
     default_config = dict(
         figsize=(16, 24),
@@ -422,7 +416,7 @@ def plot_residual_on_axis(
     label=None,
     axes=None,
 ):
-    """Draw a residual plot on an axis"""
+    """Draw a residual profile binned by color on an axis"""
     ax = axes[0]
     ax.set_title("{} band".format(band))
     ax.set_ylim(Tlims)
@@ -553,45 +547,38 @@ def plot_bin_by_mag_on_axis(
     min_mused=16.5,
     label=None,
     axes=None,
-    xlabel="Magnitude",
+    xlabel="Magnitude"
 ):
-    """Plot something"""
+    """
+    Compute and plot T, e1, e2 shape residual profiles 
+    binned by magnitude for a single band
+    """
     min_mag = mmin
     max_mag = mmax
     print(band, min_mag, max_mag)
     mag_bins = np.linspace(min_mag, max_mag, 30)
-    # print('col_bins = ',mag_bins)
 
     index = np.digitize(m, mag_bins)
-    # print('len(index) = ',len(index))
     bin_de1 = [de1[index == i].mean() for i in range(1, len(mag_bins))]
-    # print('bin_de1 = ',bin_de1)
     bin_de2 = [de2[index == i].mean() for i in range(1, len(mag_bins))]
-    # print('bin_de2 = ',bin_de2)
     bin_dT = [dT[index == i].mean() for i in range(1, len(mag_bins))]
-    # print('bin_dT = ',bin_dT)
     bin_dTfrac = [dTfrac[index == i].mean() for i in range(1, len(mag_bins))]
-    # print('bin_dTfrac = ',bin_dTfrac)
     bin_de1_err = [
         np.sqrt(de1[index == i].var() / len(de1[index == i]))
         for i in range(1, len(mag_bins))
     ]
-    # print('bin_de1_err = ',bin_de1_err)
     bin_de2_err = [
         np.sqrt(de2[index == i].var() / len(de2[index == i]))
         for i in range(1, len(mag_bins))
     ]
-    # print('bin_de2_err = ',bin_de2_err)
     bin_dT_err = [
         np.sqrt(dT[index == i].var() / len(dT[index == i]))
         for i in range(1, len(mag_bins))
     ]
-    # print('bin_dT_err = ',bin_dT_err)
     bin_dTfrac_err = [
         np.sqrt(dTfrac[index == i].var() / len(dTfrac[index == i]))
         for i in range(1, len(mag_bins))
     ]
-    # print('bin_dTfrac_err = ',bin_dTfrac_err)
 
     # Fix up nans
     for i in range(1, len(mag_bins)):
@@ -617,10 +604,7 @@ def plot_bin_by_mag_on_axis(
         color="Grey",
         alpha=0.1,
     )
-    # t_line = ax.errorbar(mag_bins[:-1], bin_dT, yerr=bin_dT_err, color='blue', fmt='o')
     _ = ax.errorbar(mag_bins[:-1], bin_dT, yerr=bin_dT_err, label=label, fmt="o")
-    # ax.axhline(y=0.003, linewidth=4, color='grey')
-    # ax.legend([t_line], [r'$\delta T$'])
     ax.set_ylabel(r"$(T_{\rm PSF} - T_{\rm model}) \quad({\rm arcsec}^2)$")
 
     ax = axes[1]
@@ -634,11 +618,9 @@ def plot_bin_by_mag_on_axis(
         color="Grey",
         alpha=0.1,
     )
-    # t_line = ax.errorbar(mag_bins[:-1], bin_dTfrac, yerr=bin_dTfrac_err, color='blue', fmt='o')
     _ = ax.errorbar(
         mag_bins[:-1], bin_dTfrac, yerr=bin_dTfrac_err, label=label, fmt="o"
     )
-    # ax.legend([t_line], [r'$\delta T$'])
     ax.legend(ncol=2, columnspacing=0.5)
     ax.set_ylabel(r"$(T_{\rm PSF} - T_{\rm model})/ T_{\rm PSF}$")
 
@@ -653,17 +635,12 @@ def plot_bin_by_mag_on_axis(
         color="Grey",
         alpha=0.1,
     )
-    # e1_line = ax.errorbar(mag_bins[:-1], bin_de1, yerr=bin_de1_err, color='red', mfc='white', fmt='o')
-    # e2_line = ax.errorbar(mag_bins[:-1], bin_de2, yerr=bin_de2_err, color='blue', fmt='o')
     e1_line = ax.errorbar(
         mag_bins[:-1], bin_de1, yerr=bin_de1_err, mfc="white", fmt="o", label=label
     )
     e2_line = ax.errorbar(
         mag_bins[:-1], bin_de2, yerr=bin_de2_err, fmt="o", label=label
     )
-    # ax.axhline(y=0.0002, linewidth=4, color='grey')
-    # ax.axhline(y=-0.0002, linewidth=4, color='grey')
-    # ax.legend(ncol=2, columnspacing=0.5)
     ax.legend([e1_line, e2_line], [r"$e_1$", r"$e_2$"], loc="lower left")
     ax.set_ylabel(r"$e_{\rm PSF} - e_{\rm model}$")
     ax.set_xlim(min_mag, max_mag)
@@ -672,7 +649,7 @@ def plot_bin_by_mag_on_axis(
 
 
 class PlotProfileVMagByBands(Plotter):
-    """Make profile plots by magnitude in a
+    """Make shape residual profile plots by magnitude in a
     3 X nband grid"""
 
     default_config = dict(
@@ -686,7 +663,6 @@ class PlotProfileVMagByBands(Plotter):
         fig, axes = plt.subplots(
             3, 4, figsize=self.config["figsize"], sharey="row", sharex="col"
         )
-        # tlims = [(0,0.6), (0.6,1.0), (1.0, 1.5), (1.5, 2.5)]
         for i, band in enumerate(bands):
             data = cat[cat["BAND"] == band]
             fracsizeres, sizeres, e1res, e2res = compute_res(data)
@@ -701,8 +677,12 @@ class PlotProfileVMagByBands(Plotter):
 
 
 class PlotPsfByBand(Plotter):
-    """Plot the PSF FWHM by band in a
-    3 X nband grid"""
+    """
+    Plot shape residual profiles binned by magnitude. The profiles are split into
+    slices of seeing. All profiles for a given shape component (T, e1, or e2) are all
+    plotted on one plot. These sliced residuals are plotted in a 3 X nband grid,
+    one column per band.
+    """
 
     default_config = dict(
         figsize=(24, 12),
