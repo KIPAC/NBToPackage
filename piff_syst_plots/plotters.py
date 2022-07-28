@@ -37,7 +37,7 @@ class PlotFootprint(Plotter):
     """
 
     default_config = dict(
-        figsize=(15, 12),
+        figsize=(12, 8),
     )
 
     def _make_plot(self, cat):
@@ -60,7 +60,7 @@ class PlotFluxByBand(Plotter):
 
     default_config = dict(
         zeropt=30.0,
-        figsize=(16, 22),
+        figsize=(12, 8),
         bands="griz",
         nbins=50,
         xmin=14,
@@ -76,7 +76,6 @@ class PlotFluxByBand(Plotter):
             flux = cat["FLUX"][cat["BAND"] == band]
             zeropt = self.config['zeropt']
             mag = zeropt - 2.5 * np.log10(flux)
-            print(band, min(mag), max(mag))
             ax.hist(mag, bins=bins, histtype="step", label=band, lw=3)
         ax.set_xlabel("mag")
         ax.legend()
@@ -170,8 +169,8 @@ class PlotColorVMagByBand(Plotter):
         nbins = self.config["n_color_slices"]
         cmap = plt.get_cmap("jet")
         for i, band in enumerate(bands):
-            ax = axs[i][0]
             # plot g-r_color vs g_mag 2d histogram with log density
+            ax = axs[i][0]
             if band == "z":
                 color = self.config["default_colors"][1]
             else:
@@ -193,8 +192,8 @@ class PlotColorVMagByBand(Plotter):
                 k = j + 1
                 mask = (mag > colorbins[i]) & (mag < colorbins[k])
                 color_slice = chist[mask]
-                loedge = "{0:3.1f}".format(cbins[i])
-                hiedge = "{0:3.1f}".format(cbins[k])
+                loedge = "{0:3.1f}".format(colorbins[i])
+                hiedge = "{0:3.1f}".format(colorbins[k])
                 ax.hist(
                     color_slice,
                     density=True,
@@ -262,7 +261,7 @@ class PlotSizeByBand(Plotter):
     """Plot the distributions of size for each band on a single plot"""
 
     default_config = dict(
-        figsize=(16, 24),
+        figsize=(12, 8),
         bands="grizy",
         logscale=False,
         min_T = 0.,
@@ -280,11 +279,6 @@ class PlotSizeByBand(Plotter):
             ax = axs
             # plot size histogram
             size = cat["T_DATA"][cat["BAND"] == band]
-            print(
-                "{} mean, median, std: {}".format(
-                    band, (np.mean(size), np.median(size), np.std(size))
-                )
-            )
             ax.hist(size, np.linspace(min_T, max_T, nbins), label=band, histtype="step", lw=3)
         ax.set_xlim(min_T, max_T)
         ax.legend()
@@ -296,9 +290,9 @@ class PlotSeeingByBand(Plotter):
     """Plot the distributions of seeing for each band on a single plot"""
 
     default_config = dict(
-        figsize=(16, 24),
+        figsize=(12, 8),
         bands="grizy",
-        min_fwhm=0.,,
+        min_fwhm=0.,
         max_fwhm=2.,
         nbins=50,
     )
@@ -326,17 +320,20 @@ class PlotTversusFWHMByBand(Plotter):
        with one plot per band"""
 
     default_config = dict(
-        figsize=(20, 18),
+        figsize=(22, 18),
         bands="griz",
         min_T = 0.,
-        max_T = 3.5,
+        max_T = 2.5,
         min_fwhm = 0.5,
-        max_fwhm = 3.0,
+        max_fwhm = 2.0,
+        vmin = 1.,
+        vmax = 1.e4
     )
 
     def _make_plot(self, cat):
         bands = self.config["bands"]
-        fig, axs = plt.subplots(2, 2, figsize=self.config["figsize"])
+        fig, axs = plt.subplots(2, 2, figsize=self.config["figsize"],
+                                gridspec_kw={"width_ratios":[1,1.25]})
         min_fwhm = self.config["min_fwhm"]
         max_fwhm = self.config["max_fwhm"]
         min_T = self.config["min_T"]
@@ -355,20 +352,21 @@ class PlotTversusFWHMByBand(Plotter):
                 bins="log",
                 cmap=cmap,
                 extent=(min_T, max_T, min_fwhm, max_fwhm),
-                vmin=1.0,
-                vmax=1e6,
+                vmin=self.config["vmin"],
+                vmax=self.config["vmax"],
             )
             ax.plot(
                 np.linspace(min_T, max_T, 2),
                 np.linspace(min_fwhm, max_fwhm, 2),
                 c="k",
                 alpha=0.3)
+            if i % 2 == 1:
+                cbar = plt.colorbar(im, ax=ax)
+                cbar.set_label('# stars')
         ax.set_xlim(min_T, max_T)
         ax.set_ylim(min_fwhm, max_fwhm)
         ax.set_xlabel(r"$T [arcsec^2]$")
         ax.set_ylabel(r"$FWHM [arcsec]$")
-        cbar = plt.colorbar(im, ax=ax)
-        cbar.set_label('# stars')
         return fig
 
 
@@ -408,7 +406,7 @@ class PlotSizeVColorByBands(Plotter):
         bands="griz",
         min_T = 0.,
         max_T = 1.6,
-        default_colors = ('GI_COLOR','IZ_COLOR')
+        default_colors = ('GI_COLOR','IZ_COLOR'),
         max_color = (3.5, 0.7),
         nbins = 30,
     )
@@ -525,7 +523,10 @@ class PlotResidualsByBand(Plotter):
     default_config = dict(
         figsize=(20, 12),
         bands="griz",
-        default_colors = ('GI_COLOR', 'IZ_COLOR')        
+        default_colors = ('GI_COLOR', 'IZ_COLOR'),        
+        Tlims = (-0.0075, 0.0075),
+        Tfraclims = (-0.02, 0.02),
+        elims = (-6.e-4, 6e-4)
     )
 
     def _make_plot(self, cat):
@@ -533,9 +534,7 @@ class PlotResidualsByBand(Plotter):
         fig, axes = plt.subplots(
             3, len(bands), figsize=self.config["figsize"], sharey="row", sharex="col"
         )
-        if True:
-            return fig
-        for band in bands:
+        for i, band in enumerate(bands):
             data = cat[cat["BAND"] == band]
             fracsizeres, sizeres, e1res, e2res = compute_res(data)
             if band == "z":
@@ -569,10 +568,10 @@ class PlotResidualsByBand(Plotter):
                 bin_de1_err,
                 bin_de2,
                 bin_de2_err,
-                Tlims=None,
-                Tfraclims=None,
-                elims=None,
-                axes=axes,
+                Tlims=self.config["Tlims"],
+                Tfraclims=self.config["Tfraclims"],
+                elims=self.config["elims"],
+                axes=axes[:,i]
             )
         return fig
 
@@ -597,7 +596,6 @@ def plot_bin_by_mag_on_axis(
     """
     min_mag = mmin
     max_mag = mmax
-    print(band, min_mag, max_mag)
     mag_bins = np.linspace(min_mag, max_mag, 30)
 
     index = np.digitize(m, mag_bins)
@@ -711,7 +709,6 @@ class PlotProfileVMagByBands(Plotter):
             fracsizeres, sizeres, e1res, e2res = compute_res(data)
             zeropt = self.config["zeropt"]
             mag = zeropt - 2.5 * np.log10(data["FLUX"])
-            print("Total in band: ", len(data))
 
             plot_bin_by_mag_on_axis(
                 band, mag, sizeres, fracsizeres, e1res, e2res, axes=axes[:, i]
@@ -753,13 +750,6 @@ class PlotPsfByBand(Plotter):
                 e1res_cut = e1res[t_cut]
                 e2res_cut = e2res[t_cut]
 
-                print(
-                    band,
-                    "{} - {}asec: ".format(lims[0], lims[1]),
-                    len(mag_cut),
-                    "frac: ",
-                    len(mag_cut) / len(data),
-                )
                 plot_bin_by_mag_on_axis(
                     band,
                     mag_cut,
