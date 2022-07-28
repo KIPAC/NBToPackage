@@ -4,21 +4,21 @@ import numpy as np
 
 
 def compute_res(d):
-    """Compute the residuals"""
+    """Compute the shape residuals"""
     de1 = d["G1_DATA"] - d["G1_MODEL"]
     de2 = d["G2_DATA"] - d["G2_MODEL"]
     dt = d["T_DATA"] - d["T_MODEL"]
     dtfrac = dt / d["T_DATA"]
-    print("mean de = ", np.mean(de1), np.mean(de2))
-    print("mean dt = ", np.mean(dt))
+    # print("mean de = ", np.mean(de1), np.mean(de2))
+    # print("mean dt = ", np.mean(dt))
 
     return dtfrac, dt, de1, de2
 
 
 def bin_res_by_color(m, dT, dTfrac, de1, de2, min_edge=0.0, max_edge=3.5):
-    """Compute residuals by color"""
+    """Compute profile of residuals binned by color"""
     bins = np.linspace(min_edge, max_edge, 30)
-    print("col_bins = ", bins)
+    # print("col_bins = ", bins)
 
     index = np.digitize(m, bins)
     # print('len(index) = ',len(index))
