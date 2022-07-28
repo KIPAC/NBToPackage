@@ -276,7 +276,7 @@ class PlotSizeByBand(Plotter):
         min_T = self.config["min_T"]
         max_T = self.config["max_T"]
         nbins = self.config["nbins"]
-            for band in bands:
+        for band in bands:
             ax = axs
             # plot size histogram
             size = cat["T_DATA"][cat["BAND"] == band]
