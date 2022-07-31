@@ -8,6 +8,8 @@ Take some time to discuss these questions.
 4. How do we manage common parameters?
 5. Do we want a command-line tool?  What options and arguments should it take?
 
+Let's take about 10' to come up with _brief_ answers to these questions.
+
 For what it's worth, here is [my take on those questions](03_answers.md)
 
 
