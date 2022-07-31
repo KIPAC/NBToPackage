@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 from piff_syst_plots.funcs import compute_res, bin_res_by_color
 from piff_syst_plots.core import Plotter
+from piff_syst_plots.label import Labels
 
 
 class PlotStarsPerCCD(Plotter):
@@ -26,7 +27,7 @@ class PlotStarsPerCCD(Plotter):
             np.stack((cat["EXPNUM"], cat["CCDNUM"]), axis=1), axis=0, return_counts=True
         )
         plt.hist(nstars * self.config["factor"], bins=self.config["nbins"])
-        plt.xlabel("Nstars / CCD")
+        plt.xlabel(Labels.nstars)
         return fig
 
 
@@ -46,10 +47,10 @@ class PlotFootprint(Plotter):
         catra = cat["RA"]
         catra[catra > 180.0] -= 360.0
         im = ax.hexbin(catra, cat["DEC"], bins="log", mincnt=1)
-        ax.set_xlabel("RA")
-        ax.set_ylabel("DEC")
+        ax.set_xlabel(Labels.ra)
+        ax.set_ylabel(Labels.dec)
         cbar = plt.colorbar(im, ax=ax)
-        cbar.set_label("# stars")
+        cbar.set_label(Labels.nstars)
         ax.invert_xaxis()
         # ax.set_ylim(cat['dec'].min(), cat['dec'].max())
         return fig
@@ -77,7 +78,7 @@ class PlotFluxByBand(Plotter):
             zeropt = self.config['zeropt']
             mag = zeropt - 2.5 * np.log10(flux)
             ax.hist(mag, bins=bins, histtype="step", label=band, lw=3)
-        ax.set_xlabel("mag")
+        ax.set_xlabel(Labels.mag)
         ax.legend()
         return fig
 
@@ -183,7 +184,7 @@ class PlotColorVMagByBand(Plotter):
             ax.set_ylabel("%s mag"%(band))
             ax.set_xlabel(color)
             cbar = plt.colorbar(im, ax=ax)
-            cbar.set_label("# stars")
+            cbar.set_label(Labels.nstars)
 
             # plot color histogram in mag slices
             ax = axs[i][1]
@@ -282,7 +283,7 @@ class PlotSizeByBand(Plotter):
             ax.hist(size, np.linspace(min_T, max_T, nbins), label=band, histtype="step", lw=3)
         ax.set_xlim(min_T, max_T)
         ax.legend()
-        ax.set_xlabel("T [arcsec^2]")
+        ax.set_xlabel(Labels.T)
         return fig
 
 
@@ -495,7 +496,8 @@ def plot_residual_on_axis(
             alpha=0.3,
         )
     _ = ax.errorbar(bins[:-1], bin_dTfrac, yerr=bin_dTfrac_err, label=label, fmt="o")
-    ax.set_ylabel(r"$(T_{\rm PSF} - T_{\rm model})/ T_{\rm PSF}$")
+    # ax.legend([t_line], [r'$\delta T$'])
+    ax.set_ylabel(Labels.psf_frac_resid)
 
     ax = axes[2]
     ax.set_ylim(elims)

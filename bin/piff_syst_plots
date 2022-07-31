@@ -5,6 +5,7 @@ import argparse
 from piff_syst_plots.core import PlotCollection, Plotter
 from piff_syst_plots.plotters import *
 
+plot_types = ['pdf', 'png', 'eps', 'jpg']
 
 def main():
     """Main function"""
@@ -13,11 +14,11 @@ def main():
     parser.add_argument('-d', '--data', metavar='FILE', type=str, help='Path to data', required=True)
     parser.add_argument('-o', '--output', metavar='DIR', type=str, help='Output directory', default='.')
     parser.add_argument('-c', '--config', metavar='FILE', type=str, help='Yaml configuration file')
-    parser.add_argument('-f', '--file_type', metavar='', type=str, help='Yaml configuration file',
-                            choices=['pdf', 'png', 'eps', 'jpg'])
+    parser.add_argument('-p', '--plot_type', metavar='', type=str, help=f'Plot file type: {list(plot_types)}',
+                            choices=plot_types)
     parser.add_argument('-a', '--annotate', action='store_true', help='Store provenance metdata with pdf')
     parser.add_argument('-l', '--list_plotters', action='store_true', help='list plotters')
-    parser.add_argument('plots', metavar='NAMES', type=str, nargs='*', help='Names of plots to draw')
+    parser.add_argument('plots', metavar='NAMES', type=str, nargs='*', help='Names of plots to draw, leave blank for all plots')
 
     args = parser.parse_args()
 
@@ -35,7 +36,7 @@ def main():
     if args.file_type is None:
         pc.show_figs(args.plots)
     else:
-        pc.save_figs(args.plots, args.file_type, args.annotate)
+        pc.save_figs(args.plots, args.plot_type, args.annotate)
 
 
 if __name__ == '__main__':

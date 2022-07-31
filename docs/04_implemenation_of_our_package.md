@@ -9,6 +9,8 @@ I'm going to give a brief tour of the implementation I came up with.  Here are s
 5. What did we come up with for dealing with common parameters?
 6. What is your overall take on the final package?
 
+Let's take about 15' (a bit longer this time) to come up with _brief_ answers to these questions.
+
 For what it's worth, here is [my take on those questions](04_answers.md)
 
 
