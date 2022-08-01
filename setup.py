@@ -12,6 +12,7 @@ setup(
     package_data={"": ["README.md", "LICENSE", "*.npy"]},
     use_scm_version={"write_to": "piff_syst_plots/_version.py"},
     include_package_data=True,
+    scripts=["bin/piff_syst_plots"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",

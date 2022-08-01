@@ -2,7 +2,7 @@
 
 import argparse
 
-from piff_syst_plots.core import PlotCollection, Plotter
+from piff_syst_plots.core import PlotCollection, Plotter, STYLES, set_interactive, set_style
 from piff_syst_plots.plotters import *
 
 plot_types = ['pdf', 'png', 'eps', 'jpg']
@@ -18,14 +18,21 @@ def main():
                             choices=plot_types)
     parser.add_argument('-a', '--annotate', action='store_true', help='Store provenance metdata with pdf')
     parser.add_argument('-l', '--list_plotters', action='store_true', help='list plotters')
+    parser.add_argument('-s', '--style', metavar='', type=str, help=f'Plot style: {list(STYLES.keys())}',
+                            choices=list(STYLES.keys()))
     parser.add_argument('plots', metavar='NAMES', type=str, nargs='*', help='Names of plots to draw, leave blank for all plots')
 
     args = parser.parse_args()
 
+    if args.plot_type is None:
+        set_interactive()
+    
     if args.list_plotters:
         print(list(Plotter.plotters.keys()))
         return
 
+    set_style(args.style)
+    
     pc = PlotCollection(args.data, args.output, args.config)
 
     if args.config is None:
