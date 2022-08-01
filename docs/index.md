@@ -50,16 +50,14 @@ all edit it.
 
 Ok, Let's get started, here are some times for guidance:
 
-12' Breakout discussion, 5' Full group, 3' overhead
+25' Total:  10' Intro/Overhead, 10' Breakout discussion, 5' Full group,
 [Original Notebook](01_starting_with_the_original.md)
 
-12' Breakout discussion, 5' Full group, 3' overhead
+30' Total:  5' Intro/Overhead, 15' Breakout discussion, 10' Full group
 [Software Goals](02_goals_for_our_software.md)
-
-12' Breakout discussion, 5' Full group, 3' overhead
 [Designing our Package](03_designing_our_package.md)
 
-15' Breakout discussion, 7' Full group, 3' overhead
+35' Total: 10' Intro/Overhead 15' Breakout discussion, 10' Full group
 [Implementation of our Package](04_implementation_of_our_package.md)
 
 Extras: [Python package tooling](extra_python_tooling.md)
