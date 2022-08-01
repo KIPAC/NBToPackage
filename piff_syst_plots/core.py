@@ -11,8 +11,48 @@ from collections import OrderedDict
 from dataclasses import dataclass
 import fitsio
 
+import matplotlib as mpl
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.figure import Figure
+
+
+def set_interactive():
+    mpl.use('qtagg')
+
+
+def set_paper_style():
+    # set some plotting defaults
+    mpl.rc(('lines', 'axes') , linewidth=2)
+    mpl.rc(('xtick', 'ytick'), labelsize=15)
+    mpl.rc(('xtick.major', 'ytick.major'), width=2)
+    mpl.rcParams['axes.labelsize'] = 18
+    mpl.rcParams['font.family'] = 'serif'
+    mpl.rcParams['mathtext.fontset'] = 'stix'
+    mpl.rcParams['legend.fontsize'] = 15
+    mpl.rcParams['font.size'] = 18
+
+
+def set_talk_style():
+    # set some plotting defaults
+    mpl.rc(('lines', 'axes') , linewidth=2)
+    mpl.rc(('xtick', 'ytick'), labelsize=15)
+    mpl.rc(('xtick.major', 'ytick.major'), width=2)
+    mpl.rcParams['axes.labelsize'] = 26
+    mpl.rcParams['font.family'] = 'serif'
+    mpl.rcParams['mathtext.fontset'] = 'stix'
+    mpl.rcParams['legend.fontsize'] = 18
+    mpl.rcParams['font.size'] = 26
+
+
+STYLES = dict(
+    paper=set_paper_style,
+    talk=set_talk_style,
+)
+
+
+def set_style(style):
+    the_func = STYLES[style]
+    the_func()
 
 
 class Plotter:
@@ -201,6 +241,7 @@ class PlotCollection:
             plot_name_list = self._fig_dict.keys()
         for plot_name in plot_name_list:
             self.show_fig(plot_name)
+        mpl.pyplot.show()
 
     def save_figs(
         self,
