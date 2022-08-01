@@ -19,7 +19,7 @@ def main():
     parser.add_argument('-a', '--annotate', action='store_true', help='Store provenance metdata with pdf')
     parser.add_argument('-l', '--list_plotters', action='store_true', help='list plotters')
     parser.add_argument('-s', '--style', metavar='', type=str, help=f'Plot style: {list(STYLES.keys())}',
-                            choices=list(STYLES.keys()))
+                            choices=list(STYLES.keys()), default='paper')
     parser.add_argument('plots', metavar='NAMES', type=str, nargs='*', help='Names of plots to draw, leave blank for all plots')
 
     args = parser.parse_args()
