@@ -31,9 +31,9 @@ instructions on how to do so.   It should only take 10-15' minutes following the
 
 [Installation instructions](installation.md)
 
-Given the time constraints, you probably also want to have a look at
-the 
+On the other hand, you can also just follow along this documentation:
 
+[https://kipac.github.io/NBToPackage/](https://kipac.github.io/NBToPackage/)
 
 ## Course Contents
 
