@@ -25,9 +25,9 @@ To reach these objectives we are going to break this down as follows
 
 Please have a look at the slides from Dark Energy School [session on design code libraries and abstract public interfaces (APIs)](https://lsstdesc.org/pages/DESchool.html#JarvisZuntz), [slides are here](https://lsstdesc.org/assets/pdf/docs/ParisDESchoolAPIDesign.pdf)
 
-Please also set up the software package and try running both versions
-of the notebook and the command line tool for comparison.  That should
-only take 10-15' minutes following these instructions:
+If you want to set up the software package and try running both versions
+of the notebook and the command line tool for comparison, here are
+instructions on how to do so.   It should only take 10-15' minutes following these instructions:
 
 [Installation instructions](installation.md)
 
@@ -56,6 +56,7 @@ Ok, Let's get started, here are some times for guidance:
 30' Total:  5' Intro/Overhead, 15' Breakout discussion, 10' Full group
 [Software Goals](02_goals_for_our_software.md)
 [Designing our Package](03_designing_our_package.md)
+
 
 35' Total: 10' Intro/Overhead 15' Breakout discussion, 10' Full group
 [Implementation of our Package](04_implementation_of_our_package.md)
