@@ -33,7 +33,7 @@ def main():
 
     pc.make_plots(args.plots)
 
-    if args.file_type is None:
+    if args.plot_type is None:
         pc.show_figs(args.plots)
     else:
         pc.save_figs(args.plots, args.plot_type, args.annotate)
