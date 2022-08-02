@@ -61,7 +61,7 @@ Ok, Let's get started, here are some times for guidance:
 35' Total: 10' Intro/Overhead 15' Breakout discussion, 10' Full group
 [Implementation of our Package](04_implementation_of_our_package.md)
 
-Extras: [Python package tooling](extra_python_tooling.md)
+Extras: [Python package description](package_description.md)
 
 
 
