@@ -50,6 +50,35 @@ I made a `bin`  area for command line scripts:
 	1 piff_syst_plots: a script to generate plots
 
 
+### setup.py file
+
+We use this to build the package using `pip`.   It include a few particular things:
+
+	1.   Declaring where the code lives and what the python package is called:
+
+	packages=["piff_syst_plots"],
+	package_data={"": ["README.md", "LICENSE", "*.npy"]},
+
+
+	2.  Stuff for the version tracking
+
+	setup_requires=['setuptools_scm', 'setuptools_scm_git_archive'],
+    use_scm_version={"write_to": "piff_syst_plots/_version.py"},
+
+
+	3.  The command line script
+
+	scripts=["bin/piff_syst_plots"],
+
+
+	4.  The dependencies:
+
+	install_requires=[
+        "matplotlib",
+        "numpy",
+    ],
+
+
 ### Documentation
 
 I made a `docs` area, and used the mechanism that `github` provides to turn that into this web documentation.
